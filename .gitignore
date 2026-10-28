@@ -1,0 +1,15 @@
+# Per-user pipeline settings (see config.default.toml)
+config.local.toml
+
+# All data: each user downloads the source zips into data/raw/ themselves;
+# everything else under data/ is rebuilt by the pipeline.
+data/
+
+# Per-run pipeline logs
+logs/
+
+# uv-managed virtualenv (uv sync)
+.venv/
+
+__pycache__/
+.DS_Store

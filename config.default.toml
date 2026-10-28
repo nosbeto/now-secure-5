@@ -1,0 +1,15 @@
+# Default pipeline settings (committed).
+# To override for your machine, create config.local.toml next to this file (git-ignored)
+# containing only the keys you want to change, e.g.:
+#
+#   [paths]
+#   raw_dir = '~/Downloads/now_secure_zips'
+#
+# Relative paths resolve from the project root; absolute and ~ paths are used as-is.
+
+[paths]
+raw_dir      = 'data/raw'                            # source .zip files, never modified
+interim_dir  = 'data/interim'                        # zips extracted here by the unzip task
+jsonl_file   = 'data/processed/assessments.jsonl'    # combined JSONL (written by to_jsonl, read by load_duckdb)
+duckdb_file  = 'data/processed/assessments.duckdb'   # analysis database (rebuilt by load_duckdb)
+rejects_file = 'data/processed/rejects.jsonl'        # lines load_duckdb could not ingest
