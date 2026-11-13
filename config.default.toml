@@ -13,3 +13,14 @@ interim_dir  = 'data/interim'                        # zips extracted here by th
 jsonl_file   = 'data/processed/assessments.jsonl'    # combined JSONL (written by to_jsonl, read by load_duckdb)
 duckdb_file  = 'data/processed/assessments.duckdb'   # analysis database (rebuilt by load_duckdb)
 rejects_file = 'data/processed/rejects.jsonl'        # lines load_duckdb could not ingest
+tidy_dir     = 'data/processed/tidy'                 # Parquet copies of the tidy tables (written by flatten)
+seeds_dir    = 'seeds'                               # hand-maintained lookup CSVs (committed; loaded by build_sql)
+tiers_dir    = 'sql/tiers'                           # tier SQL, run in name order by build_sql
+views_dir    = 'sql/views'                           # shared views, run in name order by build_sql after the tiers
+queries_dir  = 'sql/queries'                         # named on-demand queries (python -m pipeline.queries)
+external_dir = 'data/external'                       # cached outside data (AOSP manifest, written by permission_meta)
+
+[permissions]
+# AOSP release tag whose framework AndroidManifest.xml gives every permission its protection level (permission_meta).
+# Changing it re-downloads once into external_dir/aosp/<tag>/ and can change the Tier 0 numbers.
+aosp_tag = 'android-14.0.0_r1'

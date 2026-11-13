@@ -1,4 +1,7 @@
+from pipeline.tasks.build_sql import BuildSqlTask
+from pipeline.tasks.flatten import FlattenTask
 from pipeline.tasks.load_duckdb import LoadDuckDbTask
+from pipeline.tasks.permission_meta import PermissionMetaTask
 from pipeline.tasks.to_jsonl import ToJsonlTask
 from pipeline.tasks.unzip import UnzipTask
 
@@ -7,4 +10,7 @@ TASKS = [
     UnzipTask(),
     ToJsonlTask(),
     LoadDuckDbTask(),
+    FlattenTask(),
+    PermissionMetaTask(),
+    BuildSqlTask(),
 ]

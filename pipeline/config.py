@@ -57,6 +57,16 @@ class Config:
                 raise ConfigError(f'Unknown keys in [{section}] of {source}: {sorted(unknown)}')
             base[section].update(values)
 
+    def value(self, section: str, key: str) -> str:
+        '''Return [section].<key> as a non-empty string (for settings that are not paths).'''
+        try:
+            value = self._data[section][key]
+        except KeyError:
+            raise ConfigError(f'[{section}].{key} is not defined in {DEFAULT_CONFIG_FILE.name}') from None
+        if not isinstance(value, str) or not value.strip():
+            raise ConfigError(f'[{section}].{key} must be a non-empty string')
+        return value.strip()
+
     def path(self, key: str) -> Path:
         '''Return [paths].<key> as an absolute Path (relative values resolve from the project root).'''
         try:

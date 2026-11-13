@@ -5,7 +5,9 @@ description = "Task runner that prepares the NowSecure group assessment data"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-    "duckdb>=1.1,<2",
+    "duckdb>=2.0,<3",
+    "pandas>=3.1.0",
+    "pyarrow>=26.0.0",
 ]
 
 [tool.uv]

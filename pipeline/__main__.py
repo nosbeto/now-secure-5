@@ -27,7 +27,7 @@ def main():
         runner = PipelineRunner(TASKS)
         if args.list:
             for task in runner.tasks:
-                print(f'{task.name:<12} {(task.__doc__ or "").strip()}')
+                print(f'{task.name:<16} {(task.__doc__ or "").strip()}')
             return
 
         log_file = RunLog.start_file()
