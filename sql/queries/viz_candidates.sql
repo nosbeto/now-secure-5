@@ -1,12 +1,13 @@
--- SDK analysis: how Tier 0 relates to the Android SDK level an app targets.
--- Run with:  uv run python -m pipeline.queries run sdk_
+-- Visualization candidates: queries that return interesting data we may want to chart.
+-- Run with:  uv run python -m pipeline.queries run viz_
 --
--- This file is a starting point: copy a query, give it a new unique `-- name:` (keep the sdk_ prefix),
--- and end it with a semicolon at the end of a line. See "Add a query" in the README.
--- target_sdk comes from the dynamic scan, so it is NULL for apps without one.
+-- Found a query worth visualizing? Add it here: give it a unique `-- name: viz_...` line, a one-line
+-- comment saying what it shows, and end it with a semicolon at the end of a line. See "Add a query" in the README.
+-- The three examples below relate Tier 0 to the app's target SDK level (target_sdk comes from the dynamic
+-- scan, so it is NULL for apps without one).
 
 
--- name: sdk_tier0_apps_by_target_sdk
+-- name: viz_tier0_apps_by_target_sdk
 -- How many apps target each SDK level, and how many of them are Tier 0.
 -- count(DISTINCT ...) because the join repeats an app once per unused permission.
 SELECT a.target_sdk,
@@ -18,7 +19,7 @@ WHERE a.has_overprivileged_check
 GROUP BY 1
 ORDER BY 1 NULLS LAST;
 
--- name: sdk_tier0_pairs_by_level
+-- name: viz_tier0_pairs_by_level
 -- Unused dangerous vs signature permissions, split at targetSDK 29 (Android 10, scoped storage).
 SELECT CASE WHEN a.target_sdk IS NULL THEN 'unknown'
             WHEN a.target_sdk >= 29 THEN '29+'
@@ -31,7 +32,7 @@ JOIN app a USING (id)
 GROUP BY 1
 ORDER BY 1;
 
--- name: sdk_unused_storage_by_target_sdk
+-- name: viz_unused_storage_by_target_sdk
 -- Apps with an unused READ_EXTERNAL_STORAGE (the most common Tier 0 permission), by target SDK level.
 SELECT a.target_sdk, count(*) AS apps
 FROM tier0 t

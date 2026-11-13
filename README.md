@@ -57,7 +57,7 @@ sql/                       # all analysis SQL
   tiers/                   # PJG tier tables, built by the pipeline (+ README for Tier 0 / Tier 1)
   views/                   # shared views anyone can add, built by the pipeline after the tiers
   queries/                 # named queries you run on demand; never change the database
-                           #   profiling.sql, tier0.sql, sdk_analysis.sql (starter examples)
+                           #   profiling.sql, tier0.sql, viz_candidates.sql (queries to chart)
 seeds/                     # hand-maintained lookup CSVs, loaded as tables (e.g. perm_group.csv)
 
 data/                      # git-ignored, nothing here is committed
@@ -265,16 +265,16 @@ The query files in `sql/queries/`:
 |---|---|---|
 | `profiling.sql` | `raw_`, `p1_` | what's in the database and how complete it is |
 | `tier0.sql` | `tier0_` | the Tier 0 report numbers |
-| `sdk_analysis.sql` | `sdk_` | **starter file**: three example `count` queries relating Tier 0 to the app's target SDK level. Copy one to begin. |
+| `viz_candidates.sql` | `viz_` | **queries worth visualizing.** Found a query that returns interesting data? Add it here. Starts with three example `count` queries relating Tier 0 to the app's target SDK level; copy one to begin. |
 
 1. Add your query to the file for its topic, or create a new file such as
    `sql/queries/publisher_analysis.sql`. The runner picks up every `.sql` file in the folder.
 2. Give every statement a `-- name:` line with a **unique** name, and end it with `;` at the end of
-   a line. Use one prefix per file (`sdk_`, `publisher_`, …) so the whole group runs together.
-   This one is from `sdk_analysis.sql`:
+   a line. Use one prefix per file (`viz_`, `publisher_`, …) so the whole group runs together.
+   This one is from `viz_candidates.sql`:
 
    ```sql
-   -- name: sdk_unused_storage_by_target_sdk
+   -- name: viz_unused_storage_by_target_sdk
    -- Apps with an unused READ_EXTERNAL_STORAGE (the most common Tier 0 permission), by target SDK level.
    SELECT a.target_sdk, count(*) AS apps
    FROM tier0 t
@@ -284,14 +284,14 @@ The query files in `sql/queries/`:
    ORDER BY 1 NULLS LAST;
    ```
 
-3. Run it: `uv run python -m pipeline.queries run sdk_` (the whole group) or
-   `run sdk_unused_storage` (just this one).
+3. Run it: `uv run python -m pipeline.queries run viz_` (the whole group) or
+   `run viz_unused_storage` (just this one).
 
 Tips:
 
 - **Count apps, not rows, after a join.** `tier0` has one row per app *and* permission, so joining
   `app` to it repeats an app once per unused permission. Use `count(DISTINCT a.id)` for apps, as
-  `sdk_tier0_apps_by_target_sdk` does, or start from the one-row-per-app view `tier0_by_app`.
+  `viz_tier0_apps_by_target_sdk` does, or start from the one-row-per-app view `tier0_by_app`.
 - **Check totals against known numbers:** 153 apps have the over-privilege check, 107 are Tier 0.
 - The runner opens the database read-only, so a helper table must be `CREATE TEMP TABLE`. Helper
   `CREATE` statements always run, even when you filter by name, so later queries can use them.
